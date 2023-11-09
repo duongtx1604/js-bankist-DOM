@@ -57,9 +57,17 @@ btnScrollTo.addEventListener('click', function (e) {
 
   section1.scrollIntoView({ behavior: 'smooth' });
 });
-
-//-----------
 // Page Navigation
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault();
+
+  // Matching strategy
+  if (e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href');
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  }
+});
+//-----------
 
 // Method 1 (forEach)
 // document.querySelectorAll('.nav__link').forEach(function (el) {
@@ -76,16 +84,6 @@ btnScrollTo.addEventListener('click', function (e) {
 // Dùng e.targer trỏ đến phần tử được click
 //1. Add event listener to common parent element
 //2. Determine what element originated the event
-
-document.querySelector('.nav__links').addEventListener('click', function (e) {
-  e.preventDefault();
-
-  // Matching strategy
-  if (e.target.classList.contains('nav__link')) {
-    const id = e.target.getAttribute('href');
-    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
-  }
-});
 
 // Tabbed component
 
@@ -107,6 +105,24 @@ tabsContainer.addEventListener('click', function (e) {
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
     .classList.add('operations__content--active');
 });
+
+// Menu fade animation
+const handleHover = function (e) {
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    siblings.forEach(el => {
+      if (el !== link) el.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
+};
+
+const nav = document.querySelector('.nav');
+nav.addEventListener('mouseover', handleHover.bind(0.5));
+nav.addEventListener('mouseout', handleHover.bind(1));
 ////////////////////////////////
 // const h1 = document.querySelector('h1');
 
