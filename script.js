@@ -189,6 +189,29 @@ allSections.forEach(function (section) {
 });
 
 //-----------Lazy loading image---------
+const imgTarget = document.querySelectorAll('img[data-src]');
+
+const lazyLoading = function (entries, observer) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) return;
+  entry.target.src = entry.target.dataset.src;
+
+  //chỉ xoá mờ khi tải xong
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+
+  observer.unobserve(entry.target);
+};
+
+const lazyImgObserver = new IntersectionObserver(lazyLoading, {
+  root: null,
+  threshold: 0, // gọi callback ngay khi một pixel của phần tử được quan sát hiển thị
+  rootMargin: '50px', // bắt đầu gọi callback trước khi phần tử đến 200px của viewport
+});
+
+imgTarget.forEach(img => lazyImgObserver.observe(img));
 ////////////////////////////////
 // const h1 = document.querySelector('h1');
 
