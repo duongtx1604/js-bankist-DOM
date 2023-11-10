@@ -1,24 +1,26 @@
 'use strict';
 
 ///////////////////////////////////////
-// Modal window
 
 const header = document.querySelector('.header');
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
-const btnCloseModal = document.querySelector('.btn--close-modal');
-const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
-const btnScrollTo = document.querySelector('.btn--scroll-to');
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContent = document.querySelectorAll('.operations__content');
-const section1 = document.querySelector('#section--1');
-const section3 = document.querySelector('#section--3');
-const btnLeft = document.querySelector('.slider__btn--left');
-const btnRight = document.querySelector('.slider__btn--right');
 const slides = document.querySelectorAll('.slide');
 const dotContainer = document.querySelector('.dots');
 const nav = document.querySelector('.nav');
+
+const btnCloseModal = document.querySelector('.btn--close-modal');
+const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
+
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+const section1 = document.querySelector('#section--1');
+const section3 = document.querySelector('#section--3');
 
 //-----------------Modal function------------
 const modalFn = function () {
@@ -346,15 +348,20 @@ const slider = function () {
   });
 };
 
-modalFn();
-buttonSmooth();
-pageNavi();
-tabbedComponent();
-slider();
-lazyImg();
-revealSections();
-stickyNavi();
-fadeAnimation();
+// init
+const init = function () {
+  modalFn();
+  buttonSmooth();
+  pageNavi();
+  tabbedComponent();
+  slider();
+  lazyImg();
+  revealSections();
+  stickyNavi();
+  fadeAnimation();
+};
+
+init();
 ////////////////////////////////
 // const h1 = document.querySelector('h1');
 
