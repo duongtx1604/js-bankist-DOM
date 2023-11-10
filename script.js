@@ -17,61 +17,71 @@ const section3 = document.querySelector('#section--3');
 const btnLeft = document.querySelector('.slider__btn--left');
 const btnRight = document.querySelector('.slider__btn--right');
 const slides = document.querySelectorAll('.slide');
+const dotContainer = document.querySelector('.dots');
+const nav = document.querySelector('.nav');
 
-const openModal = function (e) {
-  e.preventDefault();
-  modal.classList.remove('hidden');
-  overlay.classList.remove('hidden');
+//-----------------Modal function------------
+const modalFn = function () {
+  const openModal = function (e) {
+    e.preventDefault();
+    modal.classList.remove('hidden');
+    overlay.classList.remove('hidden');
+  };
+
+  const closeModal = function () {
+    modal.classList.add('hidden');
+    overlay.classList.add('hidden');
+  };
+  btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
+
+  btnCloseModal.addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
 };
-
-const closeModal = function () {
-  modal.classList.add('hidden');
-  overlay.classList.add('hidden');
-};
-btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
-
-btnCloseModal.addEventListener('click', closeModal);
-overlay.addEventListener('click', closeModal);
-
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-    closeModal();
-  }
-});
-
 //-----------------Button Smooth scroll------------
-btnScrollTo.addEventListener('click', function (e) {
-  const s1coords = section1.getBoundingClientRect();
-  // console.log(s1coords);
 
-  // console.log('Current scroll (X/Y)', window.pageXOffset, pageYOffset);
+const buttonSmooth = function () {
+  btnScrollTo.addEventListener('click', function (e) {
+    const s1coords = section1.getBoundingClientRect();
+    // console.log(s1coords);
 
-  // console.log(
-  //   'heigh/width viewport',
-  //   document.documentElement.clientHeight,
-  //   document.documentElement.clientWidth
-  // );
+    // console.log('Current scroll (X/Y)', window.pageXOffset, pageYOffset);
 
-  //Scrolling
-  // window.scrollTo({
-  //   left: s1coords.left + window.pageXOffset,
-  //   top: s1coords.top + window.pageYOffset,
-  //   behavior: 'smooth',
-  // });
+    // console.log(
+    //   'heigh/width viewport',
+    //   document.documentElement.clientHeight,
+    //   document.documentElement.clientWidth
+    // );
 
-  section1.scrollIntoView({ behavior: 'smooth' });
-});
+    //Scrolling
+    // window.scrollTo({
+    //   left: s1coords.left + window.pageXOffset,
+    //   top: s1coords.top + window.pageYOffset,
+    //   behavior: 'smooth',
+    // });
+
+    section1.scrollIntoView({ behavior: 'smooth' });
+  });
+};
 //-----------------Page Navigation-----------------
-document.querySelector('.nav__links').addEventListener('click', function (e) {
-  e.preventDefault();
+const pageNavi = function () {
+  document.querySelector('.nav__links').addEventListener('click', function (e) {
+    e.preventDefault();
 
-  // Matching strategy
-  if (e.target.classList.contains('nav__link')) {
-    const id = e.target.getAttribute('href');
-    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
-  }
-});
-//-----------
+    // Matching strategy
+    if (e.target.classList.contains('nav__link')) {
+      const id = e.target.getAttribute('href');
+      if (id !== '#')
+        document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+};
+//-----------Tabbed component
 
 // Method 1 (forEach)
 // document.querySelectorAll('.nav__link').forEach(function (el) {
@@ -91,42 +101,45 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 
 // Tabbed component
 
-tabsContainer.addEventListener('click', function (e) {
-  const clicked = e.target.closest('.operations__tab');
+const tabbedComponent = function () {
+  tabsContainer.addEventListener('click', function (e) {
+    const clicked = e.target.closest('.operations__tab');
 
-  // Guard clause
-  // Chặn lỗi add class khi không tìm được el
-  if (!clicked) return;
+    // Guard clause
+    // Chặn lỗi add class khi không tìm được el
+    if (!clicked) return;
 
-  //xoá active trên mọi el content và active
-  tabsContent.forEach(t => t.classList.remove('operations__content--active'));
-  tabs.forEach(t => t.classList.remove('operations__tab--active'));
+    //xoá active trên mọi el content và active
+    tabsContent.forEach(t => t.classList.remove('operations__content--active'));
+    tabs.forEach(t => t.classList.remove('operations__tab--active'));
 
-  // Activate tab
-  clicked.classList.add('operations__tab--active');
-  // Activate content
-  document
-    .querySelector(`.operations__content--${clicked.dataset.tab}`)
-    .classList.add('operations__content--active');
-});
-
-//-----------Menu fade animation------------
-const handleHover = function (e) {
-  if (e.target.classList.contains('nav__link')) {
-    const link = e.target;
-    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
-    const logo = link.closest('.nav').querySelector('img');
-
-    siblings.forEach(el => {
-      if (el !== link) el.style.opacity = this;
-    });
-    logo.style.opacity = this;
-  }
+    // Activate tab
+    clicked.classList.add('operations__tab--active');
+    // Activate content
+    document
+      .querySelector(`.operations__content--${clicked.dataset.tab}`)
+      .classList.add('operations__content--active');
+  });
 };
-// Passing "argument" into handler
-const nav = document.querySelector('.nav');
-nav.addEventListener('mouseover', handleHover.bind(0.5));
-nav.addEventListener('mouseout', handleHover.bind(1));
+//-----------Menu fade animation------------
+const fadeAnimation = function () {
+  const handleHover = function (e) {
+    if (e.target.classList.contains('nav__link')) {
+      const link = e.target;
+      const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+      const logo = link.closest('.nav').querySelector('img');
+
+      siblings.forEach(el => {
+        if (el !== link) el.style.opacity = this;
+      });
+      logo.style.opacity = this;
+    }
+  };
+  // Passing "argument" into handler
+
+  nav.addEventListener('mouseover', handleHover.bind(0.5));
+  nav.addEventListener('mouseout', handleHover.bind(1));
+};
 
 //-----------Sticky navigation-----------
 
@@ -152,132 +165,196 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 
 // const observer = new IntersectionObserver(obsCallback, obsOptions);
 // observer.observe(section1);
-const navHeight = nav.getBoundingClientRect().height;
-const stickyNav = function (entries) {
-  const [entry] = entries;
-  if (!entry.isIntersecting === true) nav.classList.add('sticky');
-  else nav.classList.remove('sticky');
-};
+const stickyNavi = function () {
+  const navHeight = nav.getBoundingClientRect().height;
+  const stickyNav = function (entries) {
+    const [entry] = entries;
+    if (!entry.isIntersecting === true) nav.classList.add('sticky');
+    else nav.classList.remove('sticky');
+  };
 
-const headerObserver = new IntersectionObserver(stickyNav, {
-  root: null,
-  threshold: 0,
-  rootMargin: `-${navHeight}px`,
-});
-headerObserver.observe(header);
+  const headerObserver = new IntersectionObserver(stickyNav, {
+    root: null,
+    threshold: 0,
+    rootMargin: `-${navHeight}px`,
+  });
+  headerObserver.observe(header);
+};
 
 //-----------Reveal sections---------
-const allSections = document.querySelectorAll('.section');
+const revealSections = function () {
+  const allSections = document.querySelectorAll('.section');
 
-const revealSection = function (entries, observer) {
-  const [entry] = entries;
+  const revealSection = function (entries, observer) {
+    const [entry] = entries;
 
-  //if isInter = true -> run
-  if (!entry.isIntersecting) return;
-  entry.target.classList.remove('section--hidden');
+    //if isInter = true -> run
+    if (!entry.isIntersecting) return;
+    entry.target.classList.remove('section--hidden');
 
-  //Close effect
-  observer.unobserve(entry.target);
-};
+    //Close effect
+    observer.unobserve(entry.target);
+  };
 
-//options config
-const sectionObserver = new IntersectionObserver(revealSection, {
-  root: null,
-  threshold: 0.15,
-});
-
-//initialization khởi tạo
-allSections.forEach(function (section) {
-  sectionObserver.observe(section);
-  section.classList.add('section--hidden');
-});
-
-//-----------Lazy loading image---------
-const imgTarget = document.querySelectorAll('img[data-src]');
-
-const lazyLoading = function (entries, observer) {
-  const [entry] = entries;
-
-  if (!entry.isIntersecting) return;
-  entry.target.src = entry.target.dataset.src;
-
-  //chỉ xoá mờ khi tải xong
-  entry.target.addEventListener('load', function () {
-    entry.target.classList.remove('lazy-img');
+  //options config
+  const sectionObserver = new IntersectionObserver(revealSection, {
+    root: null,
+    threshold: 0.15,
   });
 
-  observer.unobserve(entry.target);
+  //initialization khởi tạo
+  allSections.forEach(function (section) {
+    sectionObserver.observe(section);
+    section.classList.add('section--hidden');
+  });
 };
 
-const lazyImgObserver = new IntersectionObserver(lazyLoading, {
-  root: null,
-  threshold: 0, // gọi callback ngay khi một pixel của phần tử được quan sát hiển thị
-  rootMargin: '50px', // bắt đầu gọi callback trước khi phần tử đến 200px của viewport
-});
+//-----------Lazy loading image---------
+const lazyImg = function () {
+  const imgTarget = document.querySelectorAll('img[data-src]');
 
-imgTarget.forEach(img => lazyImgObserver.observe(img));
+  const lazyLoading = function (entries, observer) {
+    const [entry] = entries;
+
+    if (!entry.isIntersecting) return;
+    entry.target.src = entry.target.dataset.src;
+
+    //chỉ xoá mờ khi tải xong
+    entry.target.addEventListener('load', function () {
+      entry.target.classList.remove('lazy-img');
+    });
+
+    observer.unobserve(entry.target);
+  };
+
+  const lazyImgObserver = new IntersectionObserver(lazyLoading, {
+    root: null,
+    threshold: 0, // gọi callback ngay khi một pixel của phần tử được quan sát hiển thị
+    rootMargin: '50px', // bắt đầu gọi callback trước khi phần tử đến 200px của viewport
+  });
+
+  imgTarget.forEach(img => lazyImgObserver.observe(img));
+};
 
 //--------------Slider--------
-let curSlide = 0;
-const maxSlide = slides.length;
+const slider = function () {
+  const defaultSlide = 2;
+  let curSlide = defaultSlide;
+  const maxSlide = slides.length;
 
-// go to slide
-const goToSlide = function (slide) {
-  slides.forEach(
-    (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
-  );
+  ////Functions
+  //create dots
+  const createDots = function () {
+    slides.forEach(function (_, i) {
+      dotContainer.insertAdjacentHTML(
+        'beforeend',
+        `<button class="dots__dot" data-slide="${i}"></button>`
+      );
+    });
+  };
+
+  //activate dots
+  const activateDot = function (slide) {
+    // clear active
+    [...document.querySelectorAll('.dots__dot')].forEach(t => {
+      t.classList.remove('dots__dot--active');
+    });
+
+    //add
+    document
+      .querySelector(`.dots__dot[data-slide="${slide}"]`)
+      .classList.add('dots__dot--active');
+  };
+
+  // go to slide
+  const goToSlide = function (slide) {
+    slides.forEach(
+      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+    );
+  };
+  // default display
+
+  // Next slide
+  const nextSlide = function () {
+    curSlide = document.querySelector('.dots__dot--active').dataset.slide;
+    if (Number(curSlide) === maxSlide - 1) {
+      curSlide = 0;
+    } else curSlide++;
+
+    goToSlide(curSlide);
+    activateDot(curSlide);
+  };
+  // Prev slide
+  const prevSlide = function () {
+    curSlide = document.querySelector('.dots__dot--active').dataset.slide;
+    if (Number(curSlide) === 0) {
+      curSlide = maxSlide - 1;
+    } else curSlide--;
+
+    goToSlide(curSlide);
+    activateDot(curSlide);
+  };
+
+  const init = function () {
+    createDots();
+    goToSlide(defaultSlide);
+    activateDot(defaultSlide);
+  };
+  init();
+
+  //Event handlers
+  btnRight.addEventListener('click', nextSlide);
+  btnLeft.addEventListener('click', prevSlide);
+
+  // Arrow Left && Right keydown slide
+
+  // Method 1: all document
+  // document.addEventListener('keydown', function (e) {
+  //   if (e.key === 'ArrowLeft') prevSlide();
+  //   e.key === 'ArrowRight' && nextSlide();
+  // });
+
+  // Method 2: Focus (add tabindex="0")
+  document.addEventListener('keydown', function (e) {
+    // const isFocusInside = section3.contains(document.activeElement);
+
+    // Method 3: getBounding
+    const section3Rect = section3.getBoundingClientRect();
+    const isFocusInside = section3Rect.top <= 0 && section3Rect.bottom >= 0;
+
+    // section3Rect.left >= 0 &&
+    // section3Rect.bottom <=
+    //   (window.innerHeight || document.documentElement.clientHeight);
+    // section3Rect.right <=
+    //   (window.innerWidth || document.documentElement.clientWidth);
+
+    if (isFocusInside) {
+      if (e.key === 'ArrowLeft') {
+        prevSlide();
+      }
+      if (e.key === 'ArrowRight') {
+        nextSlide();
+      }
+    }
+  });
+
+  dotContainer.addEventListener('click', function (e) {
+    if (!e.target.classList.contains('dots__dot')) return;
+    const { slide } = e.target.dataset;
+    goToSlide(slide);
+    activateDot(slide);
+  });
 };
-// default display
-goToSlide(0);
 
-// Next slide
-const nextSlide = function () {
-  if (curSlide === maxSlide - 1) {
-    curSlide = 0;
-  } else curSlide++;
-
-  goToSlide(curSlide);
-};
-// Prev slide
-const prevSlide = function () {
-  if (curSlide === 0) {
-    curSlide = maxSlide - 1;
-  } else curSlide--;
-
-  goToSlide(curSlide);
-};
-
-btnRight.addEventListener('click', nextSlide);
-btnLeft.addEventListener('click', prevSlide);
-
-// Arrow Left && Right keydown slide
-
-// Method 1: all document
-// document.addEventListener('keydown', function (e) {
-//   if (e.key === 'ArrowLeft') prevSlide();
-//   e.key === 'ArrowRight' && nextSlide();
-// });
-
-// Method 2: Focus (add tabindex="0")
-document.addEventListener('keydown', function (e) {
-  // const isFocusInside = section3.contains(document.activeElement);
-
-  // Method 3: getBounding
-  const section3Rect = section3.getBoundingClientRect();
-  const isFocusInside = section3Rect.top <= 0 && section3Rect.bottom >= 0;
-
-  // section3Rect.left >= 0 &&
-  // section3Rect.bottom <=
-  //   (window.innerHeight || document.documentElement.clientHeight);
-  // section3Rect.right <=
-  //   (window.innerWidth || document.documentElement.clientWidth);
-
-  if (isFocusInside) {
-    if (e.key === 'ArrowLeft') prevSlide();
-    if (e.key === 'ArrowRight') nextSlide();
-  }
-});
-
+modalFn();
+buttonSmooth();
+pageNavi();
+tabbedComponent();
+slider();
+lazyImg();
+revealSections();
+stickyNavi();
+fadeAnimation();
 ////////////////////////////////
 // const h1 = document.querySelector('h1');
 
