@@ -232,7 +232,7 @@ const lazyImg = function () {
   const lazyImgObserver = new IntersectionObserver(lazyLoading, {
     root: null,
     threshold: 0, // gọi callback ngay khi một pixel của phần tử được quan sát hiển thị
-    rootMargin: '50px', // bắt đầu gọi callback trước khi phần tử đến 200px của viewport
+    rootMargin: '200px', // bắt đầu gọi callback trước khi phần tử đến 200px của viewport
   });
 
   imgTarget.forEach(img => lazyImgObserver.observe(img));
@@ -297,12 +297,9 @@ const slider = function () {
     activateDot(curSlide);
   };
 
-  const init = function () {
-    createDots();
-    goToSlide(defaultSlide);
-    activateDot(defaultSlide);
-  };
-  init();
+  createDots();
+  goToSlide(defaultSlide);
+  activateDot(defaultSlide);
 
   //Event handlers
   btnRight.addEventListener('click', nextSlide);
