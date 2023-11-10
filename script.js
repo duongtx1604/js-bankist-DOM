@@ -35,7 +35,7 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-// Button Smooth scroll
+//-----------------Button Smooth scroll------------
 btnScrollTo.addEventListener('click', function (e) {
   const s1coords = section1.getBoundingClientRect();
   // console.log(s1coords);
@@ -57,7 +57,7 @@ btnScrollTo.addEventListener('click', function (e) {
 
   section1.scrollIntoView({ behavior: 'smooth' });
 });
-// Page Navigation
+//-----------------Page Navigation-----------------
 document.querySelector('.nav__links').addEventListener('click', function (e) {
   e.preventDefault();
 
@@ -106,7 +106,7 @@ tabsContainer.addEventListener('click', function (e) {
     .classList.add('operations__content--active');
 });
 
-// Menu fade animation
+//-----------Menu fade animation------------
 const handleHover = function (e) {
   if (e.target.classList.contains('nav__link')) {
     const link = e.target;
@@ -124,9 +124,9 @@ const nav = document.querySelector('.nav');
 nav.addEventListener('mouseover', handleHover.bind(0.5));
 nav.addEventListener('mouseout', handleHover.bind(1));
 
-//Sticky navigation
+//-----------Sticky navigation-----------
 
-//old method
+//old method luôn quan sát vị trí scroll -> chậm
 // const initialCoords = section1.getBoundingClientRect();
 // window.addEventListener('scroll', function () {
 //   console.log(this.window.scrollY);
@@ -151,7 +151,6 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 const navHeight = nav.getBoundingClientRect().height;
 const stickyNav = function (entries) {
   const [entry] = entries;
-  console.log(entry);
   if (!entry.isIntersecting === true) nav.classList.add('sticky');
   else nav.classList.remove('sticky');
 };
@@ -161,8 +160,35 @@ const headerObserver = new IntersectionObserver(stickyNav, {
   threshold: 0,
   rootMargin: `-${navHeight}px`,
 });
-
 headerObserver.observe(header);
+
+//-----------Reveal sections---------
+const allSections = document.querySelectorAll('.section');
+
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+
+  //if isInter = true -> run
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+
+  //Close effect
+  observer.unobserve(entry.target);
+};
+
+//options config
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+
+//initialization khởi tạo
+allSections.forEach(function (section) {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+});
+
+//-----------Lazy loading image---------
 ////////////////////////////////
 // const h1 = document.querySelector('h1');
 
