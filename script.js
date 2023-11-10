@@ -13,6 +13,10 @@ const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 const section1 = document.querySelector('#section--1');
+const section3 = document.querySelector('#section--3');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
+const slides = document.querySelectorAll('.slide');
 
 const openModal = function (e) {
   e.preventDefault();
@@ -212,6 +216,68 @@ const lazyImgObserver = new IntersectionObserver(lazyLoading, {
 });
 
 imgTarget.forEach(img => lazyImgObserver.observe(img));
+
+//--------------Slider--------
+let curSlide = 0;
+const maxSlide = slides.length;
+
+// go to slide
+const goToSlide = function (slide) {
+  slides.forEach(
+    (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+  );
+};
+// default display
+goToSlide(0);
+
+// Next slide
+const nextSlide = function () {
+  if (curSlide === maxSlide - 1) {
+    curSlide = 0;
+  } else curSlide++;
+
+  goToSlide(curSlide);
+};
+// Prev slide
+const prevSlide = function () {
+  if (curSlide === 0) {
+    curSlide = maxSlide - 1;
+  } else curSlide--;
+
+  goToSlide(curSlide);
+};
+
+btnRight.addEventListener('click', nextSlide);
+btnLeft.addEventListener('click', prevSlide);
+
+// Arrow Left && Right keydown slide
+
+// Method 1: all document
+// document.addEventListener('keydown', function (e) {
+//   if (e.key === 'ArrowLeft') prevSlide();
+//   e.key === 'ArrowRight' && nextSlide();
+// });
+
+// Method 2: Focus (add tabindex="0")
+document.addEventListener('keydown', function (e) {
+  // const isFocusInside = section3.contains(document.activeElement);
+
+  // Method 3: getBounding
+  const section3Rect = section3.getBoundingClientRect();
+  const isFocusInside = section3Rect.top <= 0 && section3Rect.bottom >= 0;
+
+  // section3Rect.left >= 0 &&
+  // section3Rect.bottom <=
+  //   (window.innerHeight || document.documentElement.clientHeight);
+  // section3Rect.right <=
+  //   (window.innerWidth || document.documentElement.clientWidth);
+
+  if (isFocusInside) {
+    if (e.key === 'ArrowLeft') prevSlide();
+    if (e.key === 'ArrowRight') nextSlide();
+  }
+});
+
 ////////////////////////////////
 // const h1 = document.querySelector('h1');
 
